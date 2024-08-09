@@ -22,6 +22,11 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Gestion de fidélité'),
         actions: [
           IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.bar_chart_rounded),
+          ),
+          const SizedBox(width: 20),
+          IconButton(
             onPressed: () {
               Navigator.push(
                 context,
