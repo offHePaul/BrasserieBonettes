@@ -29,8 +29,8 @@ class AllCardsScreen extends StatelessWidget {
                   borderSide: BorderSide.none,
                 ),
               ),
-              onSubmitted: (value) {
-                cardProvider.filterCards(value);
+              onChanged: (value) {
+                cardProvider.filterCards(value); // Filtrer lors de la saisie
               },
             ),
           ),

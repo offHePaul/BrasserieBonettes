@@ -19,4 +19,13 @@ class LoyaltyCard {
   // Un identifiant unique basé sur le nom
   @Index(unique: true)
   late String identifier;
+
+  // Date d'inscription
+  late DateTime registrationDate;
+
+  // Dernière mise à jour
+  late DateTime lastUpdated;
+
+  // Date du dernier coffret reçu
+  DateTime? lastRewardDate;
 }

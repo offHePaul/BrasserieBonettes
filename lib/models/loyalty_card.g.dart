@@ -27,13 +27,28 @@ const LoyaltyCardSchema = CollectionSchema(
       name: r'identifier',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'lastRewardDate': PropertySchema(
       id: 2,
+      name: r'lastRewardDate',
+      type: IsarType.dateTime,
+    ),
+    r'lastUpdated': PropertySchema(
+      id: 3,
+      name: r'lastUpdated',
+      type: IsarType.dateTime,
+    ),
+    r'name': PropertySchema(
+      id: 4,
       name: r'name',
       type: IsarType.string,
     ),
+    r'registrationDate': PropertySchema(
+      id: 5,
+      name: r'registrationDate',
+      type: IsarType.dateTime,
+    ),
     r'rewardCount': PropertySchema(
-      id: 3,
+      id: 6,
       name: r'rewardCount',
       type: IsarType.long,
     )
@@ -85,8 +100,11 @@ void _loyaltyCardSerialize(
 ) {
   writer.writeLong(offsets[0], object.checkedBoxes);
   writer.writeString(offsets[1], object.identifier);
-  writer.writeString(offsets[2], object.name);
-  writer.writeLong(offsets[3], object.rewardCount);
+  writer.writeDateTime(offsets[2], object.lastRewardDate);
+  writer.writeDateTime(offsets[3], object.lastUpdated);
+  writer.writeString(offsets[4], object.name);
+  writer.writeDateTime(offsets[5], object.registrationDate);
+  writer.writeLong(offsets[6], object.rewardCount);
 }
 
 LoyaltyCard _loyaltyCardDeserialize(
@@ -99,8 +117,11 @@ LoyaltyCard _loyaltyCardDeserialize(
   object.checkedBoxes = reader.readLong(offsets[0]);
   object.id = id;
   object.identifier = reader.readString(offsets[1]);
-  object.name = reader.readString(offsets[2]);
-  object.rewardCount = reader.readLong(offsets[3]);
+  object.lastRewardDate = reader.readDateTimeOrNull(offsets[2]);
+  object.lastUpdated = reader.readDateTime(offsets[3]);
+  object.name = reader.readString(offsets[4]);
+  object.registrationDate = reader.readDateTime(offsets[5]);
+  object.rewardCount = reader.readLong(offsets[6]);
   return object;
 }
 
@@ -116,8 +137,14 @@ P _loyaltyCardDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 3:
+      return (reader.readDateTime(offset)) as P;
+    case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
+      return (reader.readDateTime(offset)) as P;
+    case 6:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -562,6 +589,136 @@ extension LoyaltyCardQueryFilter
     });
   }
 
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastRewardDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'lastRewardDate',
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastRewardDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'lastRewardDate',
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastRewardDateEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastRewardDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastRewardDateGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastRewardDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastRewardDateLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastRewardDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastRewardDateBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastRewardDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastUpdatedEqualTo(DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastUpdated',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastUpdatedGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastUpdated',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastUpdatedLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastUpdated',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      lastUpdatedBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastUpdated',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -694,6 +851,62 @@ extension LoyaltyCardQueryFilter
   }
 
   QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      registrationDateEqualTo(DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'registrationDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      registrationDateGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'registrationDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      registrationDateLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'registrationDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
+      registrationDateBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'registrationDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterFilterCondition>
       rewardCountEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -783,6 +996,31 @@ extension LoyaltyCardQuerySortBy
     });
   }
 
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> sortByLastRewardDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastRewardDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy>
+      sortByLastRewardDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastRewardDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> sortByLastUpdated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastUpdated', Sort.asc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> sortByLastUpdatedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastUpdated', Sort.desc);
+    });
+  }
+
   QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -792,6 +1030,20 @@ extension LoyaltyCardQuerySortBy
   QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy>
+      sortByRegistrationDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'registrationDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy>
+      sortByRegistrationDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'registrationDate', Sort.desc);
     });
   }
 
@@ -847,6 +1099,31 @@ extension LoyaltyCardQuerySortThenBy
     });
   }
 
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> thenByLastRewardDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastRewardDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy>
+      thenByLastRewardDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastRewardDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> thenByLastUpdated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastUpdated', Sort.asc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> thenByLastUpdatedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastUpdated', Sort.desc);
+    });
+  }
+
   QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -856,6 +1133,20 @@ extension LoyaltyCardQuerySortThenBy
   QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy> thenByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy>
+      thenByRegistrationDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'registrationDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QAfterSortBy>
+      thenByRegistrationDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'registrationDate', Sort.desc);
     });
   }
 
@@ -887,10 +1178,29 @@ extension LoyaltyCardQueryWhereDistinct
     });
   }
 
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QDistinct> distinctByLastRewardDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastRewardDate');
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QDistinct> distinctByLastUpdated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastUpdated');
+    });
+  }
+
   QueryBuilder<LoyaltyCard, LoyaltyCard, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, LoyaltyCard, QDistinct>
+      distinctByRegistrationDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'registrationDate');
     });
   }
 
@@ -921,9 +1231,29 @@ extension LoyaltyCardQueryProperty
     });
   }
 
+  QueryBuilder<LoyaltyCard, DateTime?, QQueryOperations>
+      lastRewardDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastRewardDate');
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, DateTime, QQueryOperations> lastUpdatedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastUpdated');
+    });
+  }
+
   QueryBuilder<LoyaltyCard, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
+    });
+  }
+
+  QueryBuilder<LoyaltyCard, DateTime, QQueryOperations>
+      registrationDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'registrationDate');
     });
   }
 

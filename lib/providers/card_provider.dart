@@ -16,11 +16,14 @@ class CardProvider with ChangeNotifier {
   }
 
   Future<void> addCard(LoyaltyCard card) async {
+    card.registrationDate = DateTime.now();
+    card.lastUpdated = DateTime.now();
     await _isarService.addLoyaltyCard(card);
     fetchCards();
   }
 
   Future<void> updateCard(LoyaltyCard card) async {
+    card.lastUpdated = DateTime.now();
     await _isarService.updateCard(card);
     fetchCards();
   }
